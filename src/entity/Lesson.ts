@@ -1,33 +1,30 @@
-import { type } from "os";
 import { 
     Entity, 
     PrimaryGeneratedColumn, 
     Column, 
     BaseEntity, 
     CreateDateColumn, 
-    UpdateDateColumn, 
-    JoinColumn,
-    ManyToOne,
-    OneToOne
+    UpdateDateColumn 
 } from "typeorm"
-import { Category } from "./Category";
-import { User } from "./User";
 
 
 @Entity()
-export class Interest extends BaseEntity{
+export class Lesson extends BaseEntity{
 
     @PrimaryGeneratedColumn()
     id: number
 
-
-    // userID here
     @Column()
-    userId: string
+    name: string
 
-    // catID
     @Column()
-    categoryId: number
+    courseId: number
+
+    @Column()
+    moduleId: number
+
+    @Column()
+    lessonVideo: string
 
     @CreateDateColumn()
 	created_at: Date;
