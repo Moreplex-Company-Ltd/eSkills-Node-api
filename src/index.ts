@@ -1,28 +1,37 @@
 import * as express from "express"
 import * as bodyParser from "body-parser"
 import * as morgan from 'morgan';
-import { Request, Response } from "express"
+import cors = require("cors");
+import { Request, Response, NextFunction } from "express"
 import { AppDataSource } from "./data-source"
 import { Routes } from "./routes"
 import { User, UserType } from "./entity/User"
+import { createConnection } from "typeorm";
+import AppError from "./utils/appError";
+import authRoutes from "./routes/authRoutes";
+import catRoutes from "./routes/categoryRoutes";
 
-const port = 3000
 
-function handleError(err: { statusCode: any; message: any }, _req: any, res: { status: (arg0: any) => { (): any; new(): any; send: { (arg0: any): void; new(): any } } }, _next: any) {
-    res.status(err.statusCode || 500).send(err.message)
-  }
 
-//   function handleError(err, _req, res, _next) {
-//     res.status(err.statusCode || 500).send(err.message)
-//   }
+
 
 AppDataSource.initialize()
-.then(async () => {
+// createConnection()
+.then(async  () => {
 
     // create express app
     const app = express()
-    app.use(morgan('tiny'));
+
+    // middlewares
     app.use(bodyParser.json())
+    app.use(morgan('dev'));
+    app.use(cors());
+    
+
+    // routes
+    app.use('/api/auth', authRoutes);
+    app.use('/api', catRoutes)
+
 
     // register express routes from defined application routes
     Routes.forEach(route => {
@@ -35,7 +44,7 @@ AppDataSource.initialize()
           }
         });
       });
-      
+
     // Routes.forEach(route => {
     //     (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
     //         const result = (new (route.controller as any))[route.action](req, res, next)
@@ -59,7 +68,35 @@ AppDataSource.initialize()
     //     })
     // )    
 
-    app.use(handleError);
+     // HEALTH CHECKER
+     app.get('/api', async (_, res: Response) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Welcome to skills api v1'
+        });
+      });
+
+    //   unhandles routes
+    app.all('*', (req: Request, res: Response, next: NextFunction) => {
+        next(new AppError(404, `Route ${req.originalUrl} not found`));
+    });
+
+
+    // global error handler
+    app.use(
+        (error: AppError, req: Request, res: Response, next: NextFunction) => {
+          error.status = error.status || 'error';
+          error.statusCode = error.statusCode || 500;
+  
+          res.status(error.statusCode).json({
+            status: error.status,
+            message: error.message,
+          });
+        }
+    );
+
+    const port = 3000
+
     app.listen(port);
     console.log(`Express server has started on port ${port}.`);
 })
