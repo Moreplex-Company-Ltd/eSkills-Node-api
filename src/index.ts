@@ -100,7 +100,7 @@ AppDataSource.initialize()
         }
     );
 
-    const port = 3001
+    const port = process.env.port || 3001
 
     app.listen(port);
     console.log(`Express server has started on port ${port}.`);
