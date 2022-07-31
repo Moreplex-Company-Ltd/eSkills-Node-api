@@ -6,12 +6,14 @@ import {
     Column, 
     BaseEntity, 
     CreateDateColumn, 
-    UpdateDateColumn 
+    UpdateDateColumn, 
+    OneToMany
 } from "typeorm"
 import {
     IsEmail, Length, MinLength
 } from 'class-validator'
 import { signJWT } from "../utils/jwt"
+import { Interest } from "./Interest"
 
 
 export enum UserType {
@@ -70,6 +72,10 @@ export class User extends BaseEntity{
         default: UserType.USER
     })
     role: UserType
+
+
+    @OneToMany(()=> Interest, interest=> interest.user )
+    interests: Interest[];
 
     @CreateDateColumn()
 	created_at: Date;

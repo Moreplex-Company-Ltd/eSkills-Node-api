@@ -22,8 +22,11 @@ export class Interest extends BaseEntity{
 
 
     // userID here
-    @Column()
-    userId: string
+    // @Column()
+    // userId: string
+    @ManyToOne(()=>User, user=>user.interests)
+    // @JoinColumn({name: "userId"})
+    user: User
 
     // catID
     @Column()

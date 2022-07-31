@@ -18,13 +18,28 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
 
         // insert into interest table
         try {
-            interests.map(async(interest: number)=> {
-                console.log(userId, interest)
-                await interestRepository.save({
-                    userId: userId,
-                    categoryId: interest
-                })
+            // interests.map(async(interest: number)=> {
+            //     console.log(userId, interest)
+            //     await interestRepository.save({
+            //         userId: userId,
+            //         categoryId: interest
+            //     })
+            // })
+            // save interests first
+            interests.map( async (interest)=>{
+                try {
+                    const int = new Interest()
+                    int.user = userId;
+                    int.categoryId = interest;
+                    await interestRepository.save(int)
+                    
+                } catch (error) {
+                    return next (new AppError(400, 'Error adding interest, please try again'))
+                }
+
             })
+
+            
 
             return res.status(201).json({
                 status: 'success',
@@ -47,6 +62,16 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
     }
 }
 
+export const getMyInterests =async (req:Request, res:Response, next:NextFunction) => 
+{
+    try {
+        const interests = interestRepository.findBy({user: req.body.userId})
+        
+    } catch (error:any) {
+        next(error)
+    }
+}
+
 export const getUserInfo = async(req: Request, res: Response, next: NextFunction)=>
 {
     try {
@@ -54,11 +79,18 @@ export const getUserInfo = async(req: Request, res: Response, next: NextFunction
             return next(new AppError(400, 'No user id passed'))
         }
 
-        const user = await userRepository.findBy({id: req.params.id});
+        const user = await userRepository.find({
+            where: {id: req.params.id},
+            relations: { interests: true}
+            
+        });
         console.log(user)
         if(!user){
             return next(new AppError(400, 'No user found for the id passed'))
         }
+
+        // get his interests
+        // const interests = interestRepository.f
 
         return res.status(200).json({
             status: "success",
