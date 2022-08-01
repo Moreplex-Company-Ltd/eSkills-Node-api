@@ -103,7 +103,7 @@ export class User extends BaseEntity{
 
         const bearerToken = jwt.sign({
             id: user.id,
-            firstName: user.firstName,
+            name: user.firstName.concat(' ', user.lastName),
             role: user.role,
             avatarURL: user.avatarURL
         },
