@@ -6,7 +6,7 @@ const ExtractJWT = require('passport-jwt').ExtractJwt;
 // jwt options
 const options = {
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.SECRET_OR_KEY,
+    secretOrKey: process.env.SECRET_OR_KEY || 'secretekey1234'
 }
 
 
