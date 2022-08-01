@@ -31,6 +31,7 @@ export const signIn =  async (req: Request, res: Response, next: NextFunction ) 
         if(!user){
             return next (new AppError(400, 'Incorrect phone number or email, please try again'))
         }
+        console.log(user)
 
         // now check the password
         if(!(await User.comparePasswords(password, user.password))) {
@@ -49,6 +50,7 @@ export const signIn =  async (req: Request, res: Response, next: NextFunction ) 
 
         
     } catch (error) {
+        console.log(error)
         next(error)
     }
     

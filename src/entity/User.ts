@@ -107,7 +107,7 @@ export class User extends BaseEntity{
             role: user.role,
             avatarURL: user.avatarURL
         },
-        process.env.SECRET_OR_KEY
+        process.env.SECRET_OR_KEY || 'secretekey1234'
         )
 
 
