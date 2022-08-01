@@ -16,36 +16,34 @@ const strategy = new JWTStrategy(options, async(payload, done) => {
 
     // check and append account type to the req.. accessed by req.user
 
+    // console.log(payload)
     try {
-        // if user, append user
-        if(payload.type === 'user'){
-            const user ={
-                ... payload
-            }
-            done(null, {user})
-        }
+        // just append user object to the req
+        done (null, {...payload})
+        // // if user, append user
+        // if(payload.role === 'USER'){
+        //     const user ={
+        //         ... payload
+        //     }
+        //     done(null, {user})
+        // }
         
-        // if chef, append chef
-        if(payload.type === 'chef'){
-            const chef ={
-                ... payload
-            }
-            done(null, {chef})
-        }
+        // // if admin, append admin
+        // if(payload.type === 'ADMIN'){
+        //     const admin ={
+        //         ... payload
+        //     }
+        //     done(null, {admin})
+        // }
 
-        // if admin, append admin
-        if(payload.type === 'admin'){
-            const admin ={
-                ... payload
-            }
-            done(null, {admin})
-        }
+        
         
 
 
 
 
     } catch (error) {
+        console.log('ooop')
         console.log(error)
         done(error)
     }

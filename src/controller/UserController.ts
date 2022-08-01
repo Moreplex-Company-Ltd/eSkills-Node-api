@@ -13,8 +13,11 @@ const interestRepository = AppDataSource.getRepository(Interest);
 export const addInterest =  async(req: Request, res: Response, next: NextFunction) => 
 {
     try {
-        const userId = req.body.userId
+        const userId = req.user.id
         const interests = req.body.interests
+        if(!req.body.interests){
+            return next(new AppError(400, 'Please provide an array of interest ids'));
+        }
 
         // insert into interest table
         try {
@@ -75,12 +78,9 @@ export const getMyInterests =async (req:Request, res:Response, next:NextFunction
 export const getUserInfo = async(req: Request, res: Response, next: NextFunction)=>
 {
     try {
-        if(!req.params.id){
-            return next(new AppError(400, 'No user id passed'))
-        }
-
+        
         const user = await userRepository.find({
-            where: {id: req.params.id},
+            where: {id: req.user.id},
             relations: { interests: true}
             
         });
