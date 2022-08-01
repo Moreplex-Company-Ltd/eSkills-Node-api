@@ -16,7 +16,7 @@ const strategy = new JWTStrategy(options, async(payload, done) => {
 
     // check and append account type to the req.. accessed by req.user
 
-    console.log(payload)
+    // console.log(payload)
     try {
         // just append user object to the req
         done (null, {...payload})
