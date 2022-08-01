@@ -94,7 +94,7 @@ export const getUserInfo = async(req: Request, res: Response, next: NextFunction
 
         return res.status(200).json({
             status: "success",
-            user: user
+            user
         })
         
     } catch (error) {
