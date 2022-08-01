@@ -15,7 +15,7 @@ import catRoutes from "./routes/categoryRoutes";
 import userRoutes from "./routes/userRoutes";
 import courseRoutes from "./routes/courseRoutes";
 import moduleRoutes from "./routes/moduleRoutes";
-
+import lessonRoutes from "./routes/lessonRoutes";
 
 
 
@@ -41,6 +41,7 @@ AppDataSource.initialize()
     app.use('/api/users', userRoutes)
     app.use('/api/course', courseRoutes);
     app.use('/api/module', moduleRoutes);
+    app.use('/api/lesson', lessonRoutes);
 
 
     // register express routes from defined application routes
