@@ -32,6 +32,10 @@ export class Interest extends BaseEntity{
     @Column()
     categoryId: number
 
+    @OneToOne(()=>Category, category=>category.name, {eager: true})
+    @JoinColumn()
+    category: Category
+
     @CreateDateColumn()
 	created_at: Date;
 
