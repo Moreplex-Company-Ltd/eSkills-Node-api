@@ -59,10 +59,31 @@ export const addModule =async (req:Request, res:Response, next:NextFunction) =>
 }
 
 
-export const getAllMoudulesofACourse =async (req:Request, res:Response, next:NextFunction) => 
+export const updateModuleName =async (req:Request, res:Response, next:NextFunction) => 
 {
-    // get all modules for a given course id
+    // update module using mudule id
+    if(!req.body.moduleId){
+        return next(new AppError(400, 'Please provide a valid module id'))
+    }
+    if(!req.body.moduleName) {
+        return next(new AppError(400, 'Please provide a valid module name'))
+    }
 
+    try {
+        const module = await moduleRepository.update(req.body.moduleId, {
+            name: req.body.moduleName
+        });
+
+        console.log(module)
+    } catch (error) {
+        console.log(error)
+        next(new AppError(400, 'Unable to update module name, please try again'))
+    }
+    
+    return res.status(200).json({
+        status: "success",
+        message: "Module updated successfully"
+    })
 
 }
 
@@ -77,8 +98,11 @@ export const getAllCouseMoudules =async (req:Request, res:Response, next:NextFun
     try {
         console.log(req.params.id)
         const modules = await moduleRepository.findOne({
-            where: {id: 8},
-            relations: {lessons: true},
+            where: {id: req.params.id},
+            relations: {
+                lessons: true,
+                course: true
+            },
             
         })
 

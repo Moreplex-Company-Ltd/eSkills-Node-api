@@ -27,7 +27,6 @@ export class Module extends BaseEntity{
     // @Column()
     // categoryId: number
     @ManyToOne(()=> Course, course=>course.modules)
-    @JoinColumn({name:'course'})
     course: Course
 
     @OneToMany(()=> Lesson, lesson=>lesson.module)
