@@ -4,8 +4,11 @@ import {
     Column, 
     BaseEntity, 
     CreateDateColumn, 
-    UpdateDateColumn 
+    UpdateDateColumn, 
+    ManyToOne
 } from "typeorm"
+// import { Course } from "./Course"
+import { Module } from "./Module"
 
 
 @Entity()
@@ -17,8 +20,10 @@ export class Lesson extends BaseEntity{
     @Column()
     name: string
 
-    @Column()
-    courseId: number
+    // @Column()
+    // courseId: number
+    @ManyToOne(()=> Module, module=>module.lessons)
+    module: Module
 
     @Column()
     moduleId: number

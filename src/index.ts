@@ -13,6 +13,7 @@ import AppError from "./utils/appError";
 import authRoutes from "./routes/authRoutes";
 import catRoutes from "./routes/categoryRoutes";
 import userRoutes from "./routes/userRoutes";
+import courseRoutes from "./routes/courseRoutes";
 
 
 
@@ -27,6 +28,7 @@ AppDataSource.initialize()
     const app = express()
 
     // middlewares
+    require('./utils/passport')
     app.use(bodyParser.json())
     app.use(morgan('dev'));
     app.use(cors());
@@ -35,7 +37,8 @@ AppDataSource.initialize()
     // routes
     app.use('/api/auth', authRoutes);
     app.use('/api', catRoutes)
-    app.use('/api/me', userRoutes)
+    app.use('/api/users', userRoutes)
+    app.use('/api/course', courseRoutes);
 
 
     // register express routes from defined application routes

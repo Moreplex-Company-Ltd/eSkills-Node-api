@@ -4,8 +4,12 @@ import {
     Column, 
     BaseEntity, 
     CreateDateColumn, 
-    UpdateDateColumn 
+    UpdateDateColumn, 
+    ManyToOne,
+    OneToMany
 } from "typeorm"
+import { Course } from "./Course";
+import { Lesson } from "./Lesson";
 
 
 @Entity()
@@ -17,8 +21,14 @@ export class Module extends BaseEntity{
     @Column()
     name: string
 
-    @Column()
-    categoryId: number
+    // @Column()
+    // categoryId: number
+    @ManyToOne(()=> Course, course=>course.modules)
+    course: Course
+
+    @OneToMany(()=> Lesson, lesson=>lesson.module)
+    lessons: Lesson[];
+
 
     @CreateDateColumn()
 	created_at: Date;
