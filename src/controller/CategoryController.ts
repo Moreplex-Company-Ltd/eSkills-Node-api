@@ -11,7 +11,10 @@ const categoryRepository = AppDataSource.getRepository(Category);
 export const getAllCategories = async (req: Request, res: Response, next: NextFunction)=> 
 {
     try {
-        const result = await categoryRepository.find();
+        console.log(req.user.id)
+        const result = await categoryRepository.find({
+            relations: {courses: true}
+        });
         if(result.length===0){
             return res.status(400).json({
                 status: "success",
@@ -33,6 +36,9 @@ export const addCategory =async (req: Request, res: Response, next: NextFunction
 {
     try {
         console.log(req.body)
+        // if(req.user.role !== "ADMIN"){
+        //     return next (new AppError(400, 'Only admin can add category'))
+        // }
         // lets validata all input
         const name  = req.body.name;
         const description = req.body.description;
@@ -100,7 +106,10 @@ export const getSingleCategory = async(req: Request, res: Response, next: NextFu
             return next(new AppError(400, "Please provide a cat id in the param"))
         }
         try {
-            const cat = await categoryRepository.findBy({id: req.params.id})
+            const cat = await categoryRepository.find({
+                where: {id: req.params.id},
+                relations: {courses:true}
+            })
             
             if(!cat){
                 return next(new AppError(400, 'No category exists for the given id'))

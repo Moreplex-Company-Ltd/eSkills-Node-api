@@ -4,8 +4,11 @@ import {
     Column, 
     BaseEntity, 
     CreateDateColumn, 
-    UpdateDateColumn 
+    UpdateDateColumn, 
+    ManyToOne
 } from "typeorm"
+// import { Course } from "./Course"
+import { Module } from "./Module"
 
 
 @Entity()
@@ -14,17 +17,18 @@ export class Lesson extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({unique: true})
     name: string
 
-    @Column()
-    courseId: number
+    // @Column()
+    // courseId: number
+    @ManyToOne(()=> Module, module=>module.lessons)
+    module: Module
 
-    @Column()
-    moduleId: number
+   
 
-    @Column()
-    lessonVideo: string
+    @Column({unique:true})
+    videoURL: string
 
     @CreateDateColumn()
 	created_at: Date;

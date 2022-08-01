@@ -13,7 +13,9 @@ import AppError from "./utils/appError";
 import authRoutes from "./routes/authRoutes";
 import catRoutes from "./routes/categoryRoutes";
 import userRoutes from "./routes/userRoutes";
-
+import courseRoutes from "./routes/courseRoutes";
+import moduleRoutes from "./routes/moduleRoutes";
+import lessonRoutes from "./routes/lessonRoutes";
 
 
 
@@ -27,6 +29,7 @@ AppDataSource.initialize()
     const app = express()
 
     // middlewares
+    require('./utils/passport')
     app.use(bodyParser.json())
     app.use(morgan('dev'));
     app.use(cors());
@@ -35,7 +38,10 @@ AppDataSource.initialize()
     // routes
     app.use('/api/auth', authRoutes);
     app.use('/api', catRoutes)
-    app.use('/api/me', userRoutes)
+    app.use('/api/users', userRoutes)
+    app.use('/api/course', courseRoutes);
+    app.use('/api/module', moduleRoutes);
+    app.use('/api/lesson', lessonRoutes);
 
 
     // register express routes from defined application routes
@@ -100,7 +106,11 @@ AppDataSource.initialize()
         }
     );
 
+<<<<<<< HEAD
     const port = process.env.PORT || 3000
+=======
+    const port = process.env.port || 3001
+>>>>>>> develop
 
     app.listen(port);
     console.log(`Express server has started on port ${port}.`);

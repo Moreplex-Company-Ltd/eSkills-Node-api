@@ -4,8 +4,10 @@ import {
     Column, 
     BaseEntity, 
     CreateDateColumn, 
-    UpdateDateColumn 
+    UpdateDateColumn, 
+    OneToMany
 } from "typeorm"
+import { Course } from "./Course"
 
 
 @Entity()
@@ -27,6 +29,9 @@ export class Category extends BaseEntity{
 
     @Column()
     catURL: string
+
+    @OneToMany(()=> Course, course=>course.category)
+    courses: Course[];
 
 
     @CreateDateColumn()
