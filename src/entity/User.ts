@@ -56,7 +56,7 @@ export class User extends BaseEntity{
     password: string;
 
     @Column({
-        default: 'https://res.cloudinary.com/jondexter/image/upload/v1629122461/avatars/user_ywbrdf.png',
+        default: "https://res.cloudinary.com/jondexter/image/upload/v1632645006/avatars/y88ldaq79er8rbfwgoe3.png"
       })
       avatarURL: string;
 
