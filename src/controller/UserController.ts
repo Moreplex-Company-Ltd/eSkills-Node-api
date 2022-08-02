@@ -35,7 +35,8 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
                     const int = new Interest()
                     int.user = userId;
                     int.category = interest;
-                    await interestRepository
+                    console.log('logs int=>',int)
+                    const rest = await interestRepository
                         .createQueryBuilder()
                         .insert()
                         .into(Interest)
@@ -43,10 +44,10 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
                         .onConflict(`("categoryId") DO NOTHING`)
                         .execute();
 
-                    
+                    console.log('logs query result=>', rest)
                     
                 } catch (error) {
-                    console.log(error)
+                    console.log('logs error=>', error)
                     return next (new AppError(400, 'Error adding interest, please try again'))
                 }
 

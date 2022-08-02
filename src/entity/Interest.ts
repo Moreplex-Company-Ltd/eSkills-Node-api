@@ -32,9 +32,7 @@ export class Interest extends BaseEntity{
 
     // // catID
 
-    // @Column({unique: false})
-    // categoryId: number
-
+ 
     // @OneToMany(()=>Category, category=>category.name, { eager: true, cascade: true})
     // // @JoinColumn()
     // category: Category
