@@ -43,16 +43,18 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
                         .onConflict(`("categoryId") DO NOTHING`)
                         .execute();
 
-                    return res.status(201).json({
-                        status: 'success',
-                        message: 'Interest added successfully'
-                    })
+                    
                     
                 } catch (error) {
                     console.log(error)
                     return next (new AppError(400, 'Error adding interest, please try again'))
                 }
 
+            })
+
+            return res.status(201).json({
+                status: 'success',
+                message: 'Interest added successfully'
             })
 
             
