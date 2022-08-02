@@ -41,7 +41,7 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
                         .insert()
                         .into(Interest)
                         .values(int)
-                        .onConflict(`("categoryId") DO NOTHING`)
+                        // .onConflict(`("categoryId") DO NOTHING`)
                         .execute();
 
                     console.log('logs query result=>', rest)
