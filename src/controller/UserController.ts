@@ -15,6 +15,7 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
     try {
         const userId = req.user.id
         const interests = req.body.interests
+        console.log('interestsv =>', interests)
         if(!req.body.interests){
             return next(new AppError(400, 'Please provide an array of interest ids'));
         }
@@ -33,10 +34,22 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
                 try {
                     const int = new Interest()
                     int.user = userId;
-                    int.categoryId = interest;
-                    await interestRepository.save(int)
+                    int.category = interest;
+                    await interestRepository
+                        .createQueryBuilder()
+                        .insert()
+                        .into(Interest)
+                        .values(int)
+                        .onConflict(`("categoryId") DO NOTHING`)
+                        .execute();
+
+                    return res.status(201).json({
+                        status: 'success',
+                        message: 'Interest added successfully'
+                    })
                     
                 } catch (error) {
+                    console.log(error)
                     return next (new AppError(400, 'Error adding interest, please try again'))
                 }
 
@@ -44,11 +57,9 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
 
             
 
-            return res.status(201).json({
-                status: 'success',
-                message: 'Interest added successfully'
-            })
+            
         } catch (error) {
+            console.log(error)
             return next(new AppError(400, 'Unable to add new interest, please try again'))
         }
         
@@ -68,9 +79,16 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
 export const getMyInterests =async (req:Request, res:Response, next:NextFunction) => 
 {
     try {
-        const interests = interestRepository.findBy({user: req.body.userId})
+        console.log(req.user.id)
+        const interests = await interestRepository.find({
+            where: { user: req.user.id},
+            // select: {categoryId: true}
+            relations: {user: true}
+        })
+        console.log(interests)
         
     } catch (error:any) {
+        console.log(error)
         next(error)
     }
 }

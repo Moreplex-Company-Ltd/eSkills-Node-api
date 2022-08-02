@@ -8,7 +8,10 @@ import {
     UpdateDateColumn, 
     JoinColumn,
     ManyToOne,
-    OneToOne
+    OneToOne,
+    OneToMany,
+    ManyToMany,
+    JoinTable
 } from "typeorm"
 import { Category } from "./Category";
 import { User } from "./User";
@@ -25,14 +28,21 @@ export class Interest extends BaseEntity{
     // @Column()
     // userId: string
     @ManyToOne(()=>User, user=>user.interests)
-    // @JoinColumn({name: "userId"})
     user: User
 
-    // catID
-    @Column()
-    categoryId: number
+    // // catID
 
-    @OneToOne(()=>Category, category=>category.name, {eager: true})
+    // @Column({unique: false})
+    // categoryId: number
+
+    // @OneToMany(()=>Category, category=>category.name, { eager: true, cascade: true})
+    // // @JoinColumn()
+    // category: Category
+    
+    @OneToOne(()=>Category, category=>category.name, {
+        eager: true,
+        cascade: true
+    })
     @JoinColumn()
     category: Category
 
