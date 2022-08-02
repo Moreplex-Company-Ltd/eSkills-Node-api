@@ -5,9 +5,11 @@ import {
     BaseEntity, 
     CreateDateColumn, 
     UpdateDateColumn, 
-    OneToMany
+    OneToMany,
+    OneToOne
 } from "typeorm"
 import { Course } from "./Course"
+import { Interest } from "./Interest"
 
 
 @Entity()
@@ -20,7 +22,6 @@ export class Category extends BaseEntity{
         unique:true
     })
     name: string
-
 
     @Column({
         type: 'text'
