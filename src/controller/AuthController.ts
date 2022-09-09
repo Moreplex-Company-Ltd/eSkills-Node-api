@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from "express"
 const bcrypt = require('bcryptjs')
 import AppError from "../utils/appError";
 import { AppDataSource } from "../data-source";
+import jwtDecode from "jwt-decode";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -121,6 +122,63 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
 
 
     } catch(error){
+        next(error)
+    }
+}
+
+
+export const signUpWithGoogle = async (req:Request, res:Response, next: NextFunction) => {
+    try {
+        // obtain the token from the frontend and sign up user, we use email as password
+        const token  = req.body.token;
+        if(!token) {
+            return next(new AppError(400, "No token passed"))
+        }
+
+        const decodedToken: any = jwtDecode(token)
+        console.log(decodedToken)
+        
+        // check if user exist, if not then we create an account
+        
+        let user = await userRepository.findOneBy({email: decodedToken.email})
+
+        if(user){
+            // user exits already
+            // generate refresh and access tokens
+            const { accessToken, refreshToken, bearerToken} = await User.signTokens(user)
+
+            return res.status(200).json({
+                status: "success",
+                message: "Old user, logged in successfully",
+                accessToken,
+                bearerToken
+            })
+        }
+        
+        const newUser = {
+            firstName: decodedToken.given_name,
+            lastName: decodedToken.family_name,
+            email: decodedToken.email,
+            avatarURL: decodedToken.picture,
+            password:  await bcrypt.hash(decodedToken.email, 15),
+            accountVerified: true
+        }
+
+       const savedUser =  await userRepository.save(newUser)
+       const { accessToken, refreshToken, bearerToken} = await User.signTokens(savedUser)
+
+        return res.status(200).json({
+            status: "success",
+            message: "New user, logged in successfully",
+            accessToken,
+            bearerToken,
+
+        })
+
+
+        
+    } catch (error) {
+        console.log(error)
         next(error)
     }
 }

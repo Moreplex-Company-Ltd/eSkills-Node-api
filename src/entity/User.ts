@@ -64,7 +64,7 @@ export class User extends BaseEntity{
         type: "boolean",
         default: false
     })
-    accountVerified: string
+    accountVerified: boolean
 
     @Column({
         type: "enum",
