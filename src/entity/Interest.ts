@@ -34,15 +34,23 @@ export class Interest extends BaseEntity{
 
  
     // @OneToMany(()=>Category, category=>category.name, { eager: true, cascade: true})
-    // // @JoinColumn()
+    // @JoinColumn()
     // category: Category
-    
-    @OneToOne(()=>Category, {
-        eager: true,
-        cascade: true
-    })
+   
+    @ManyToOne(()=>Category, {eager: true})
     @JoinColumn()
     category: Category
+    
+    
+    // @OneToOne(()=>Category, {
+    //     eager: true,
+    //     cascade: true
+    // })
+    // @JoinColumn()
+    // category: Category
+
+
+
 
     @CreateDateColumn()
 	created_at: Date;

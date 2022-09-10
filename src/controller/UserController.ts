@@ -10,48 +10,44 @@ const userRepository = AppDataSource.getRepository(User);
 const interestRepository = AppDataSource.getRepository(Interest);
 
 
+
 export const addInterest =  async(req: Request, res: Response, next: NextFunction) => 
 {
     try {
-        const userId = req.user.id
+        const userId: any = req.user.id
         const interests = req.body.interests
         console.log('interestsv =>', interests)
         if(!req.body.interests){
             return next(new AppError(400, 'Please provide an array of interest ids'));
         }
+        const userr = await userRepository.findOneBy({id: userId})
+        // console.log(userr)
+
+        // const rr =  await interestRepository.find({ where: { category: userId}})
+        // console.log(rr)
 
         // insert into interest table
         try {
-            // interests.map(async(interest: number)=> {
-            //     console.log(userId, interest)
-            //     await interestRepository.save({
-            //         userId: userId,
-            //         categoryId: interest
-            //     })
-            // })
-            // save interests first
-            interests.map( async (interest)=>{
-                try {
-                    const int = new Interest()
-                    int.user = userId;
-                    int.category = interest;
-                    console.log('logs int=>',int)
-                    const rest = await interestRepository
-                        .createQueryBuilder()
-                        .insert()
-                        .into(Interest)
-                        .values(int)
-                        .onConflict(`("categoryId") DO NOTHING`)
-                        .execute();
+            interests.map(async(interest: any)=> {
+                console.log(userId, interest)
+                const item = await interestRepository.find({ relations: { user: false}, where: {category: interest} })
+                console.log("item here->>", item)
+                // if(){
+                    const newInterest = new Interest()
+                    newInterest.user = userId;
+                    newInterest.category = interest;
 
-                    console.log('logs query result=>', rest)
-                    
-                } catch (error) {
-                    console.log('logs error=>', error)
-                    return next (new AppError(400, 'Error adding interest, please try again'))
-                }
+                    const res = await interestRepository.save(newInterest)
+                    console.log(res)
+                // }
+                
 
+                
+                // this works, but i think we neeed to improve upon it and remove the duplicate data
+                
             })
+            // save interests first
+            
 
             return res.status(201).json({
                 status: 'success',
@@ -72,7 +68,7 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
         //     categoryId: 
         // })
         
-        console.log(req.body)
+
         
     } catch (error) {
         next(error)
@@ -82,12 +78,13 @@ export const addInterest =  async(req: Request, res: Response, next: NextFunctio
 export const getMyInterests =async (req:Request, res:Response, next:NextFunction) => 
 {
     try {
-        console.log(req.user.id)
+        console.log("--> UserID -",  req.user.id)
         const interests = await interestRepository.find({
             where: { user: req.user.id},
             // select: {categoryId: true}
             relations: {user: true}
         })
+
         console.log(interests)
         
     } catch (error:any) {

@@ -35,6 +35,9 @@ export class Category extends BaseEntity{
     courses: Course[];
 
 
+    // @OneToOne(()=> Interest, interest=>interest.category)
+    // interest: Interest
+
     @CreateDateColumn()
 	created_at: Date;
 
