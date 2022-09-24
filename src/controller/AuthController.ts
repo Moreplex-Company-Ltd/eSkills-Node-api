@@ -182,3 +182,14 @@ export const signUpWithGoogle = async (req:Request, res:Response, next: NextFunc
         next(error)
     }
 }
+
+
+export const resetPassword = async(req: Request, res: Response, next: NextFunction) =>
+{
+    try {
+        
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+}
