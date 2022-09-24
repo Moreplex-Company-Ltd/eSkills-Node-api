@@ -11,13 +11,15 @@ import {
     OneToOne,
     OneToMany,
     ManyToMany,
-    JoinTable
+    JoinTable,
+    Unique
 } from "typeorm"
 import { Category } from "./Category";
 import { User } from "./User";
 
 
 @Entity()
+@Unique([ 'user', 'category'])
 export class Interest extends BaseEntity{
 
     @PrimaryGeneratedColumn()
