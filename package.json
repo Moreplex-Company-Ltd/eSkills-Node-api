@@ -34,6 +34,6 @@
     "start": "ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' src/index.ts",
-    "build": "tsc --build"
+    "build": "tsc -p ."
   }
 }
