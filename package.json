@@ -2,7 +2,6 @@
   "name": "typeorm-sample",
   "version": "0.0.1",
   "description": "Awesome project developed with TypeORM.",
-  "type": "module",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/bcryptjs": "^2.4.2",
